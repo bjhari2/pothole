@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+</head>
+
+<body>
+  Hi
+  <table>
+    <tr>
+      {% for i in data %}
+      <td>{{ i.p_id }}</td>
+      <td>{{ i.img }}</td>
+      <td>{{ i.address }}</td>
+      <td>{{ i.remarks }}</td>
+      <td>{{ i.time }}</td>
+      {% endfor %}
+    </tr>
+  </table>
+</body>
+
+</html>
