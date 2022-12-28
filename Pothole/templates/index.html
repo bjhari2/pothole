@@ -8,18 +8,32 @@
 </head>
 
 <body>
-  Hi
-  <table>
-    <tr>
-      {% for i in data %}
+  {% extends 'base.html' %}
+
+  {% block content %}
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Pothole ID</th>
+        <th scope="col">Address</th>
+        <th scope="col">Remarks</th>
+        <th scope="col">Time</th>
+        <th scope="col">Image</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in data %}
+      <tr>
       <td>{{ i.p_id }}</td>
-      <td>{{ i.img }}</td>
       <td>{{ i.address }}</td>
       <td>{{ i.remarks }}</td>
       <td>{{ i.time }}</td>
-      {% endfor %}
-    </tr>
+      <td>{{ i.img }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
   </table>
+{% endblock %}
 </body>
 
 </html>
