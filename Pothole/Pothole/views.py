@@ -12,6 +12,14 @@ def dictfetchall(cursor):
     ]
 
 
+def ins(request):
+    params = (request.POST.get('address'), request.POST.get('remarks'))
+    stmt = "INSERT into pothole (address, remarks) VALUES (%s, %s)"
+    cursor = connection.cursor()
+    cursor.execute(stmt, params)
+    return render(request, 'index.html', {'info': "Inserted Successfully"})
+
+
 def index(request):
     stmt = "SELECT p_id, address, remarks, time FROM pothole"
     cursor = connection.cursor()

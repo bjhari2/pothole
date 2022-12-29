@@ -7,6 +7,7 @@
   Hi {{ user.username }}!
 {% else %}
   <p>You are not logged in</p>
-  <a href="{% url 'login' %}" id="login">Log In</a>
+  <a href="{% url 'login' %}" id="login"><button type="button" class="btn btn-dark m-2">Log In</button></a>
+  <a href="{% url 'signup' %}" id="signup"><button type="button" class="btn btn-dark m-2">Sign Up</button></a>
 {% endif %}
 {% endblock %}

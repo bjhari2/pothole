@@ -11,6 +11,8 @@
   {% extends 'base.html' %}
 
   {% block content %}
+  {% if user.is_authenticated %}
+  <p class="m-2">Potholes reported by {{ user.username }}</p>
   <table class="table table-dark table-striped">
     <thead>
       <tr>
@@ -18,7 +20,7 @@
         <th scope="col">Address</th>
         <th scope="col">Remarks</th>
         <th scope="col">Time</th>
-        <th scope="col">Image</th>
+        <!--<th scope="col">Image</th>-->
       </tr>
     </thead>
     <tbody>
@@ -28,11 +30,16 @@
       <td>{{ i.address }}</td>
       <td>{{ i.remarks }}</td>
       <td>{{ i.time }}</td>
-      <td>{{ i.img }}</td>
+      <!--<td>{{ i.img }}</td>-->
       </tr>
     {% endfor %}
     </tbody>
   </table>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}" id="login"><button type="button" class="btn btn-dark m-2">Log In</button></a>
+  <a href="{% url 'signup' %}" id="signup"><button type="button" class="btn btn-dark m-2">Sign Up</button></a>
+{% endif %}
 {% endblock %}
 </body>
 
