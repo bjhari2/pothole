@@ -3,6 +3,7 @@ from .forms import SignUpForm, LoginForm, InsertNewPothole
 from django.contrib.auth import authenticate, login, logout
 from .models import Pothole
 from django.db import connection
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 
@@ -72,7 +73,9 @@ def user(request):
             address = form.cleaned_data.get('address')
             remarks = form.cleaned_data.get('remarks')
             date = form.cleaned_data.get('date')
-            img = form.cleaned_data.get('img')
+            img = request.FILES['img']
+            fss = FileSystemStorage()
+            fss.save(img.name, img)
             p = Pothole(address=address, remarks=remarks, date=date, img=img)
             p.save()
             return render(request, 'user.html', {'form': form, 'msg': msg})
