@@ -22,45 +22,37 @@
 </head>
 
 <body>
-{% block content %}
+  {% block content %}
   {% if user.is_authenticated %}
   <nav class="navbar navbar-dark bg-dark" style="color: white;">
-        <a class="navbar-brand">Pothole Database Management System</a>
-           <a href="{% url 'logout_view' %}"><button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button></a>
-    </nav>
-    <h1> Welcome, {{ user.username }}. Your role is user</h1>
+    <a class="navbar-brand">Pothole Database Management System</a>
+    <a href="{% url 'logout_view' %}"><button class="btn btn-outline-light my-2 my-sm-0"
+        type="submit">Logout</button></a>
+  </nav>
+  <!-- <h1> Welcome, {{ user.username }}. Your role is user</h1> -->
 
+  <div class="container">
+    <form action="#" method="post">
+      <fieldset>
+        <div class="border border-primary rounded m-4 p-2">
+          <p style="text-align: center; color: black;">Click here to submit new Pothole repair request</p>
+          <div class="text-center">
+            <div class="col align-self-center">
+              <a href="{% url 'insert_pothole' %}"><button type="button"
+                  class="btn btn-pill text-white btn-primary mx-auto" style="border-radius: 30px;">Submit</button></a>
+            </div>
+          </div>
+      </fieldset>
+    </form>
+  </div>
 
-<div class="container">
-<form action="/user" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="address">Address</label>
-    <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter Pothole address" required></textarea>
-  </div>
-  <div class="form-group">
-    <label for="remarks">Remarks</label>
-    <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Say something about the pothole" required></textarea>
-  </div>
-  <div class="form-group">
-    <label for="date">Select date</label><br>
-    <input type="date" class="form-check-input" name="date" id="date" style="margin-top: 0; margin-left: 0;" required>
-    <br>
-  </div>
-  <div class="form-group">
-    <label for="img">Image</label>
-    <input type="file" id="img" name="img" accept="image/*" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
 
 
   {% else %}
-    <nav class="navbar navbar-dark bg-dark" style="color: white;">
-        <a class="navbar-brand">Pothole Database Management System</a>
-    </nav>
-<div class="content">
+  <nav class="navbar navbar-dark bg-dark" style="color: white;">
+    <a class="navbar-brand">Pothole Database Management System</a>
+  </nav>
+  <div class="content">
     <div class="container">
       <div class="row justify-content-center">
         <!-- <div class="col-md-6 order-md-2">
@@ -72,8 +64,10 @@
               <div class="form-block">
                 <div class="mb-4">
                 </div>
-                <p class="m-4" style="text-align: center; font-size: larger; color: black;">You are not logged in. Click here to login</p>
-                <a href="{% url 'login_view' %}"><button type="button" class="btn btn-pill text-white btn-block btn-primary">Login</button></a>
+                <p class="m-4" style="text-align: center; font-size: larger; color: black;">You are not logged in. Click
+                  here to login</p>
+                <a href="{% url 'login_view' %}"><button type="button"
+                    class="btn btn-pill text-white btn-block btn-primary">Login</button></a>
               </div>
             </div>
           </div>
@@ -83,8 +77,8 @@
       </div>
     </div>
   </div>
-{% endif %}
-{% endblock %}
+  {% endif %}
+  {% endblock %}
 </body>
 
 </html>

@@ -45,7 +45,7 @@ class InsertNewPothole(forms.Form):
 
     class Meta:
         model = Pothole
-        fields = ('p_id', 'address', 'remarks', 'date')
+        fields = ('p_id', 'address', 'remarks', 'date', 'img', 'user')
 
 
 class SignUpForm(UserCreationForm):

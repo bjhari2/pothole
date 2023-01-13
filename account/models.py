@@ -18,4 +18,9 @@ class Pothole(models.Model):
     remarks = models.CharField(max_length=500)
     date = models.DateField()
     img = models.ImageField(upload_to='images/', default='pothole.jpg')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='1000')
+    
+
+
+
 

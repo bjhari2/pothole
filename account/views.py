@@ -56,6 +56,26 @@ def login_view(request):
     return render(request, 'login.html', {'form': form, 'msg': msg})
 
 
+def insert_pothole(request):
+    form = InsertNewPothole(request.POST, request.FILES)
+    user = Pothole(request.POST)
+    msg = None
+    if request.method == 'POST':
+        if form.is_valid():
+            address = form.cleaned_data.get('address')
+            remarks = form.cleaned_data.get('remarks')
+            date = form.cleaned_data.get('date')
+            img = request.FILES['img']
+            fss = FileSystemStorage()
+            fss.save(img.name, img)
+            p = Pothole(address=address, remarks=remarks, date=date, img=img, user=request.user)
+            p.save()
+            return redirect('user')
+    else:
+        form = InsertNewPothole()
+    return render(request, 'insert_pothole.html', {'form': form, 'msg': msg})
+
+
 def logout_view(request):
     logout(request)
     return redirect('login_view')
