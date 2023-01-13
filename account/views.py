@@ -11,6 +11,16 @@ def index(request):
     return render(request, 'index.html')
 
 
+def dictfetchall(cursor):
+    #"Return all rows from a cursor as a dict"
+    desc = cursor.description
+
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+
 def register(request):
     msg = None
     if request.method == 'POST':
@@ -86,22 +96,11 @@ def admin(request):
 
 
 def user(request):
-    form = InsertNewPothole(request.POST, request.FILES)
-    msg = None
-    if request.method == 'POST':
-        if form.is_valid():
-            address = form.cleaned_data.get('address')
-            remarks = form.cleaned_data.get('remarks')
-            date = form.cleaned_data.get('date')
-            img = request.FILES['img']
-            fss = FileSystemStorage()
-            fss.save(img.name, img)
-            p = Pothole(address=address, remarks=remarks, date=date, img=img)
-            p.save()
-            return render(request, 'user.html', {'form': form, 'msg': msg})
-    else:
-        form = InsertNewPothole()
-    return render(request, 'user.html', {'form': form, 'msg': msg})
+    stmt = "SELECT p_id, address, remarks, date, img FROM account_pothole WHERE user_id=%s" % request.user.id
+    cursor = connection.cursor()
+    cursor.execute(stmt)
+    r = dictfetchall(cursor)
+    return render(request, 'user.html', {'data': r})
 
 
 def contractor(request):
