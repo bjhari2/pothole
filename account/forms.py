@@ -20,32 +20,12 @@ class LoginForm(forms.Form):
     )
 
 
-class InsertNewPothole(forms.Form):
-    address = forms.CharField(
-        widget = forms.TextInput(
-            attrs = {
-                "class" : "form-control"
-            }
-        )
-    )
-    remarks = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control"
-            }
-        )
-    )
-    date = forms.DateField(
-        widget= forms.DateInput(
-            attrs={
-                "class": "form-control"
-            }
-        )
-    )
+class InsertNewPothole(forms.ModelForm):
 
     class Meta:
         model = Pothole
-        fields = ('p_id', 'address', 'remarks', 'date', 'img', 'user')
+        fields = ('p_id', 'address', 'remarks', 'date', 'img', 'ward_no')
+        exclude = ['user']
 
 
 class SignUpForm(UserCreationForm):

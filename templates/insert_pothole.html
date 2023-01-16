@@ -55,6 +55,14 @@
                 <label for="img">Image</label>
                 <input type="file" id="img" name="img" accept="image/*" required>
             </div>
+            <div class="form-group">
+                <label for="ward_no">Ward number</label>
+                <select name="ward_no" id="ward_no">
+                    {% for ward in ward_list %}
+                    <option value="{{ ward.ward_no }}">{{ ward.ward_no }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

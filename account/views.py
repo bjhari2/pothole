@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm, InsertNewPothole
 from django.contrib.auth import authenticate, login, logout
-from .models import Pothole
+from .models import User, Pothole, Corporator
 from django.db import connection
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
@@ -68,22 +68,16 @@ def login_view(request):
 
 def insert_pothole(request):
     form = InsertNewPothole(request.POST, request.FILES)
-    user = Pothole(request.POST)
-    msg = None
+    ward_list = Corporator.objects.values('ward_no')
     if request.method == 'POST':
         if form.is_valid():
-            address = form.cleaned_data.get('address')
-            remarks = form.cleaned_data.get('remarks')
-            date = form.cleaned_data.get('date')
-            img = request.FILES['img']
-            fss = FileSystemStorage()
-            fss.save(img.name, img)
-            p = Pothole(address=address, remarks=remarks, date=date, img=img, user=request.user)
+            p = form.save(commit=False)
+            p.user = User.objects.get(id=request.user.id)
             p.save()
             return redirect('user')
     else:
         form = InsertNewPothole()
-    return render(request, 'insert_pothole.html', {'form': form, 'msg': msg})
+    return render(request, 'insert_pothole.html', {'form': form, 'ward_list': ward_list})
 
 
 def logout_view(request):
@@ -96,11 +90,9 @@ def admin(request):
 
 
 def user(request):
-    stmt = "SELECT p_id, address, remarks, date, img FROM account_pothole WHERE user_id=%s" % request.user.id
-    cursor = connection.cursor()
-    cursor.execute(stmt)
-    r = dictfetchall(cursor)
-    return render(request, 'user.html', {'data': r})
+    r = Pothole.objects.filter(user_id = request.user.id)
+    data = {'data' : r}
+    return render(request, 'user.html', data)
 
 
 def contractor(request):
