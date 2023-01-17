@@ -100,6 +100,8 @@ def contractor(request):
 
 
 def corporator(request):
+    r = Pothole.objects.filter(ward_no = request.user.id)
+    data = {'data' : r}
     return render(request, 'corporator.html')
 
 
