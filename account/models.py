@@ -4,17 +4,17 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
+class Corporator(models.Model):
+    ward_no = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+
+
 class User(AbstractUser):
-    is_admin= models.BooleanField('Is admin', default=False)
     is_user = models.BooleanField('Is user', default=False)
     is_contractor = models.BooleanField('Is contractor', default=False)
     is_corporator = models.BooleanField('Is corporator', default=False)
     is_section_officer = models.BooleanField('Is section officer', default=False)
-
-
-class Corporator(models.Model):
-    ward_no = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
+    ward_no = models.ForeignKey(Corporator, on_delete=models.CASCADE, null=True, db_column='ward_no')
 
 
 class Contractor(models.Model):
