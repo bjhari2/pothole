@@ -13,12 +13,11 @@ class User(AbstractUser):
     is_user = models.BooleanField('Is user', default=False)
     is_contractor = models.BooleanField('Is contractor', default=False)
     is_corporator = models.BooleanField('Is corporator', default=False)
-    is_section_officer = models.BooleanField('Is section officer', default=False)
     ward_no = models.ForeignKey(Corporator, on_delete=models.CASCADE, null=True, db_column='ward_no')
 
 
 class Contractor(models.Model):
-    c_id = models.AutoField(primary_key=True)
+    c_id = models.ForeignKey(User, primary_key=True, on_delete=models.CASCADE, db_column='c_id')
     name = models.CharField(max_length=50)
 
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm, InsertNewPothole
+from .forms import SignUpForm, LoginForm, InsertNewPothole, CorporatorRegistration, AssignToContractor
 from django.contrib.auth import authenticate, login, logout
-from .models import User, Pothole, Corporator
+from .models import User, Pothole, Corporator, Contractor
 from django.db import connection
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
@@ -26,14 +26,41 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            msg = 'user created'
+            user = form.save(commit=False)
+            user.save()
+            if user.is_contractor:          # Populating Contractor table if user is a Contractor
+                c_obj = Contractor(c_id=user.id, name=user.username)
+            msg = 'User created'
             return redirect('login_view')
         else:
-            msg = 'form is not valid'
+            msg = 'Form is not valid'
     else:
         form = SignUpForm()
     return render(request, 'register.html', {'form': form, 'msg': msg})
+
+
+#Corporator Registration view
+def corp_register(request):
+    msg = None
+    name = None
+    ward_list = Corporator.objects.all()
+    if request.method == 'POST':
+        form = CorporatorRegistration(request.POST)
+        if form.is_valid():
+            p = form.save(commit=False)
+            # Select name from corporator where ward_no = request.POST['ward_no']
+            name = Corporator.objects.filter(ward_no=request.POST['ward_no']).values('name')
+            p.username = name                           # Setting user name for Corporator from Corporator table value
+            p.is_corporator = True                      # Setting is_corporator field to True before committing
+            p.save()
+            msg = 'User created'
+            return redirect('login_view')
+        else:
+            msg = 'Form is not valid'
+            print(form.errors.as_data())
+    else:
+        form = SignUpForm()
+    return render(request, 'corporator_register.html', {'form': form, 'ward_list': ward_list ,'msg': msg})
 
 
 def login_view(request):
@@ -44,10 +71,7 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None and user.is_admin:
-                login(request, user)
-                return redirect('adminpage')
-            elif user is not None and user.is_user:
+            if user is not None and user.is_user:
                 login(request, user)
                 return redirect('user')
             elif user is not None and user.is_contractor:
@@ -56,9 +80,6 @@ def login_view(request):
             elif user is not None and user.is_corporator:
                 login(request, user)
                 return redirect('corporator')
-            elif user is not None and user.is_section_officer:
-                login(request, user)
-                return redirect('section_officer')
             else:
                 msg = 'Invalid Credentials. Please Try Again'
         else:
@@ -66,13 +87,19 @@ def login_view(request):
     return render(request, 'login.html', {'form': form, 'msg': msg})
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
+
+
+#Inserting new pothole repair request by user
 def insert_pothole(request):
     form = InsertNewPothole(request.POST, request.FILES)
     ward_list = Corporator.objects.values('ward_no')
     if request.method == 'POST':
         if form.is_valid():
             p = form.save(commit=False)
-            p.user = User.objects.get(id=request.user.id)
+            p.user = User.objects.get(id=request.user.id)               # Setting user id as id of the currently logged in user
             p.save()
             return redirect('user')
     else:
@@ -80,30 +107,24 @@ def insert_pothole(request):
     return render(request, 'insert_pothole.html', {'form': form, 'ward_list': ward_list})
 
 
-def logout_view(request):
-    logout(request)
-    return redirect('login_view')
+def assign_pothole(request):
+    pass
 
-
-def admin(request):
-    return render(request, 'admin.html')
-
-
+#User page view
 def user(request):
     r = Pothole.objects.filter(user_id = request.user.id)
     data = {'data' : r}
     return render(request, 'user.html', data)
 
 
+#Contractor page view
 def contractor(request):
     return render(request, 'contractor.html')
 
 
+#Corporator page view
 def corporator(request):
-    r = Pothole.objects.filter(ward_no = request.user.id)
+    r = Pothole.objects.filter(ward_no = request.user.ward_no)
     data = {'data' : r}
-    return render(request, 'corporator.html')
+    return render(request, 'corporator.html', data)
 
-
-def section_officer(request):
-    return render(request, 'section_officer.html')

@@ -41,10 +41,24 @@
                 </span>
                 <form method="post">
                   {% csrf_token %}
+                  <!-- <div class="form-group">
+                    <label class="d-block" for="ward_no ">Ward Number</label>
+                    <select name="ward_no" id="ward_no">
+                      {% for ward in ward_list %}
+                      <option value="{{ ward.ward_no }}">{{ ward.ward_no }}</option>
+                      {% endfor %}
+                    </select>
+                  </div> -->
+
                   <div class="form-group first">
-                    <label for="username">Username</label>
-                    {{ form.username }}
+                    <label class="d-block" for="ward_no ">Ward Number</label><br><br>
+                    <select name="ward_no" id="ward_no">
+                      {% for ward in ward_list %}
+                      <option value="{{ ward.ward_no }}">{{ ward.ward_no }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
+
                   <div class="form-group first">
                     <label for="email">Email</label>
                     {{ form.email}}
@@ -56,18 +70,6 @@
                   <div class="form-group last mb-4">
                     <label for="password">confirm Password</label>
                     {{ form.password2 }}
-                  </div>
-                  <div class="d-flex mb-5 align-items-center">
-                    <label class="control control--radio mb-0"><span class="caption">User</span>
-                      {{ form.is_user }}
-                      <div class="control__indicator"></div>
-                    </label>
-                  </div>
-                  <div class="d-flex mb-5 align-items-center">
-                    <label class="control control--radio mb-0"><span class="caption">Contractor</span>
-                      {{ form.is_contractor }}
-                      <div class="control__indicator"></div>
-                    </label>
                   </div>
                   <span class="text-error">{{ form.errors }}</span>
                   <input type="submit" value="Register" class="btn btn-pill text-white btn-block btn-primary">
