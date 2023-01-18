@@ -17,7 +17,7 @@ class User(AbstractUser):
 
 
 class Contractor(models.Model):
-    c_id = models.ForeignKey(User, primary_key=True, on_delete=models.CASCADE, db_column='c_id')
+    c_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=50)
 
 

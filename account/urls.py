@@ -10,6 +10,7 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('corp_register', views.corp_register, name='corp_register'),
     path('insert_pothole', views.insert_pothole, name='insert_pothole'),
+    path('assign_pothole', views.assign_pothole, name='assign_pothole'),
     path('user', views.user, name='user'),
     path('contractor', views.contractor, name='contractor'),
     path('corporator', views.corporator, name='corporator'),

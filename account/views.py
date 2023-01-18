@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm, InsertNewPothole, CorporatorRegistration, AssignToContractor
+from .forms import SignUpForm, LoginForm, InsertNewPotholeForm, CorpRegForm, AssignPotholeForm
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Pothole, Corporator, Contractor
 from django.db import connection
@@ -30,6 +30,7 @@ def register(request):
             user.save()
             if user.is_contractor:          # Populating Contractor table if user is a Contractor
                 c_obj = Contractor(c_id=user.id, name=user.username)
+                c_obj.save()
             msg = 'User created'
             return redirect('login_view')
         else:
@@ -45,7 +46,7 @@ def corp_register(request):
     name = None
     ward_list = Corporator.objects.all()
     if request.method == 'POST':
-        form = CorporatorRegistration(request.POST)
+        form = CorpRegForm(request.POST)
         if form.is_valid():
             p = form.save(commit=False)
             # Select name from corporator where ward_no = request.POST['ward_no']
@@ -94,7 +95,7 @@ def logout_view(request):
 
 #Inserting new pothole repair request by user
 def insert_pothole(request):
-    form = InsertNewPothole(request.POST, request.FILES)
+    form = InsertNewPotholeForm(request.POST, request.FILES)
     ward_list = Corporator.objects.values('ward_no')
     if request.method == 'POST':
         if form.is_valid():
@@ -103,12 +104,25 @@ def insert_pothole(request):
             p.save()
             return redirect('user')
     else:
-        form = InsertNewPothole()
+        form = InsertNewPotholeForm()
     return render(request, 'insert_pothole.html', {'form': form, 'ward_list': ward_list})
 
 
 def assign_pothole(request):
-    pass
+    data = Pothole.objects.filter(ward_no = request.user.ward_no)
+    form = AssignPotholeForm(request.POST or None)
+    p_list = Pothole.objects.filter(ward_no = request.user.ward_no)
+    c_list  = Contractor.objects.all()
+    if request.method == 'POST':
+        if form.is_valid():
+            alltoment = form.save(commit=False)
+            alltoment.p_id = request.POST['p_id']
+            alltoment.c_id = request.POST['c_id']
+            alltoment.save()
+            return redirect('corporator')
+    else:
+        form = AssignPotholeForm()
+    return render(request, 'assign_pothole.html', {'form': form, 'data': data, 'p_list': p_list, 'c_list': c_list})
 
 #User page view
 def user(request):

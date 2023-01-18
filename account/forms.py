@@ -20,7 +20,7 @@ class LoginForm(forms.Form):
     )
 
 
-class CorporatorRegistration(UserCreationForm):
+class CorpRegForm(UserCreationForm):
     ward_list = Corporator.objects.all()
     ward_no = forms.ModelChoiceField(
         queryset=ward_list,
@@ -54,7 +54,7 @@ class CorporatorRegistration(UserCreationForm):
         exclude = ['username', 'is_user', 'is_contractor', 'is_corporator']
 
 
-class InsertNewPothole(forms.ModelForm):
+class InsertNewPotholeForm(forms.ModelForm):
 
     class Meta:
         model = Pothole
@@ -97,15 +97,15 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2', 'is_user', 'is_contractor')
 
 
-class AssignToContractor(forms.ModelForm):
-    query1 = Pothole.objects.all()
-    query2  = Contractor.objects.all()
+class AssignPotholeForm(forms.ModelForm):
+    p_list = Pothole.objects.all()
+    c_list  = Contractor.objects.all()
     p_id = forms.ModelChoiceField(
-        queryset=query1,
+        queryset=p_list,
         widget=forms.Select()
     )
     c_id = forms.ModelChoiceField(
-        queryset=query2,
+        queryset=c_list,
         widget=forms.Select()
     )
 
