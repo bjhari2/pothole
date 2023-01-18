@@ -32,8 +32,8 @@ class Pothole(models.Model):
 
 
 class Allotment(models.Model):
-    p_id = models.ForeignKey(Pothole, primary_key=True, on_delete=models.CASCADE, db_column='p_id')
-    c_id = models.ForeignKey(Contractor, on_delete=models.CASCADE, db_column='c_id')
+    p_id = models.IntegerField(primary_key=True)
+    c_id = models.IntegerField()
 
 
 

@@ -52,7 +52,7 @@
                                     <label class="d-block" for="c_id ">Select Contractor</label>
                                     <select name="c_id" id="c_id">
                                         {% for c in c_list %}
-                                        <option value="{{ c.c_id }}">{{ c.c_id }} - {{ c.name }}</option>
+                                        <option value="{{ c.c_id }}">{{ c.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

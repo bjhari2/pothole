@@ -111,14 +111,12 @@ def insert_pothole(request):
 def assign_pothole(request):
     data = Pothole.objects.filter(ward_no = request.user.ward_no)
     form = AssignPotholeForm(request.POST or None)
-    p_list = Pothole.objects.filter(ward_no = request.user.ward_no)
+    p_list = Pothole.objects.values('p_id').filter(ward_no=request.user.ward_no)
     c_list  = Contractor.objects.all()
     if request.method == 'POST':
-        if form.is_valid():
-            alltoment = form.save(commit=False)
-            alltoment.p_id = request.POST['p_id']
-            alltoment.c_id = request.POST['c_id']
-            alltoment.save()
+        if not form.is_valid():
+            #print(c_list.query)
+            print(form.errors.as_data())
             return redirect('corporator')
     else:
         form = AssignPotholeForm()

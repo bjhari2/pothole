@@ -98,14 +98,14 @@ class SignUpForm(UserCreationForm):
 
 
 class AssignPotholeForm(forms.ModelForm):
-    p_list = Pothole.objects.all()
-    c_list  = Contractor.objects.all()
-    p_id = forms.ModelChoiceField(
-        queryset=p_list,
+    #p_list = Pothole.objects.all()
+    #c_list  = Contractor.objects.all()
+    p_id = forms.ChoiceField(
+        #queryset=p_list,
         widget=forms.Select()
     )
-    c_id = forms.ModelChoiceField(
-        queryset=c_list,
+    c_id = forms.ChoiceField(
+        #queryset=c_list,
         widget=forms.Select()
     )
 
