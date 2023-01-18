@@ -49,6 +49,23 @@
     </div>
   </div>
 
+  <div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="form-block text-center" style="padding: 15px; border-radius: 15px;">
+              <p class="m-2" style="text-align: center; font-size: larger; color: black;">Click here to validate
+                Potholes marked done by contractors</p>
+              <a href="{% url 'corp_mark_done' %}"><button type="button" class="btn btn-pill text-white btn-primary"
+                  style="border-radius: 30px;">Go!</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {% block table %}
   {% if data %}
 
@@ -74,11 +91,11 @@
                 <tbody>
                   {% for i in data %}
                   <tr>
-                    <td>{{ i.p_id }}</td>
-                    <td>{{ i.address }}</td>
-                    <td>{{ i.remarks }}</td>
-                    <td>{{ i.date }}</td>
-                    <td><img src="{{ i.img.url }}" width="100" height="100"></td>
+                    <td style="vertical-align: middle;">{{ i.p_id }}</td>
+                    <td style="vertical-align: middle;">{{ i.address }}</td>
+                    <td style="vertical-align: middle;">{{ i.remarks }}</td>
+                    <td style="vertical-align: middle;">{{ i.date }}</td>
+                    <td style="vertical-align: middle;"><img src="{{ i.img.url }}" width="100" height="100"></td>
                   </tr>
                   {% endfor %}
                 </tbody>

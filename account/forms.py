@@ -98,17 +98,23 @@ class SignUpForm(UserCreationForm):
 
 
 class AssignPotholeForm(forms.ModelForm):
-    #p_list = Pothole.objects.all()
-    #c_list  = Contractor.objects.all()
-    p_id = forms.ChoiceField(
-        #queryset=p_list,
-        widget=forms.Select()
-    )
-    c_id = forms.ChoiceField(
-        #queryset=c_list,
-        widget=forms.Select()
-    )
-
+    
     class Meta:
         model = Allotment
         fields = ('p_id', 'c_id')
+
+
+class ContMarkDoneForm(forms.ModelForm):
+
+    class Meta:
+        model = Pothole
+        fields = ('p_id',)
+        exclude = ['address', 'remarks', 'date', 'img', 'user_id', 'ward_no', 'cont_done', 'corp_done']
+
+
+class CorpMarkDoneForm(forms.ModelForm):
+
+    class Meta:
+        model = Pothole
+        fields = ('p_id',)
+        exclude = ['address', 'remarks', 'date', 'img', 'user_id', 'ward_no', 'cont_done', 'corp_done']
