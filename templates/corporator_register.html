@@ -18,7 +18,7 @@
   <!-- Style -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-  <title>PDMS</title>
+  <title>Pothole Database Management System</title>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                     <label class="d-block" for="ward_no ">Ward Number</label><br><br>
                     <select name="ward_no" id="ward_no">
                       {% for ward in ward_list %}
-                      <option value="{{ ward.ward_no }}">{{ ward.ward_no }}</option>
+                      <option value="{{ ward.ward_no }}">{{ ward.ward_no }} - {{ ward.name }}</option>
                       {% endfor %}
                     </select>
                   </div>

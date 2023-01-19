@@ -29,7 +29,6 @@
     <a href="{% url 'logout_view' %}"><button class="btn btn-outline-light my-2 my-sm-0"
         type="submit">Logout</button></a>
   </nav>
-  <!-- <h1> Welcome, {{ user.username }}. Your role is user</h1> -->
 
 
   <div class="container-fluid mt-3">
@@ -49,8 +48,8 @@
     </div>
   </div>
 
-  {% block table %}
-  {% if data %}
+  {% block table_pending %}
+  {% if data_pending %}
 
   <div class="container-fluid mt-3">
     <div class="row justify-content-center">
@@ -59,7 +58,7 @@
           <div class="col-md-12">
             <div class="form-block text-center" style="padding: 15px 0 0 0; border-radius: 15px;">
               <p style="text-align: left; font-size: larger; color: black; margin-left: 15px;">
-                Potholes reported by you:
+                Pending Pothole requests:
               </p>
               <table class="table table-dark table-striped" style="border-radius: 0 0 15px 15px;">
                 <thead>
@@ -72,7 +71,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for i in data %}
+                  {% for i in data_pending %}
                   <tr>
                     <td style="vertical-align: middle;">{{ i.p_id }}</td>
                     <td style="vertical-align: middle;">{{ i.address }}</td>
@@ -108,9 +107,68 @@
     </div>
   </div>
   {% endif %}
-  {% endblock table %}
+  {% endblock table_pending %}
+
+  {% block table_done %}
+  {% if data_done %}
+
+  <div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="form-block text-center" style="padding: 15px 0 0 0; border-radius: 15px;">
+              <p style="text-align: left; font-size: larger; color: black; margin-left: 15px;">
+                Completed Potholes requests:
+              </p>
+              <table class="table table-dark table-striped" style="border-radius: 0 0 15px 15px;">
+                <thead>
+                  <tr>
+                    <th scope="col">Pothole ID</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Remarks</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Image</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in data_done %}
+                  <tr>
+                    <td style="vertical-align: middle;">{{ i.p_id }}</td>
+                    <td style="vertical-align: middle;">{{ i.address }}</td>
+                    <td style="vertical-align: middle;">{{ i.remarks }}</td>
+                    <td style="vertical-align: middle;">{{ i.date }}</td>
+                    <td style="vertical-align: middle;"><img src="{{ i.img.url }}" width="100" height="100"></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
+
+  {% else %}
+  <div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="form-block text-center" style="padding: 15px; border-radius: 15px;">
+              <p class="m-2" style="text-align: center; font-size: larger; color: black;">Nothing to show here</p>
+              <p class="m-2" style="text-align: center;">You have not submitted any requests yet!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endblock table_done %}
 
 
   {% else %}
@@ -120,9 +178,6 @@
   <div class="content">
     <div class="container">
       <div class="row justify-content-center">
-        <!-- <div class="col-md-6 order-md-2">
-          <img src="images/undraw_file_sync_ot38.svg" alt="Image" class="img-fluid">
-        </div> -->
         <div class="col-md-6 contents">
           <div class="row justify-content-center">
             <div class="col-md-12">

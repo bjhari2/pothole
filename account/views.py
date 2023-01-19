@@ -2,23 +2,11 @@ from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm, InsertNewPotholeForm, CorpRegForm, AssignPotholeForm, ContMarkDoneForm, CorpMarkDoneForm
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Pothole, Corporator, Contractor, Allotment
-from django.db import connection
-from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 
 def index(request):
     return render(request, 'index.html')
-
-
-def dictfetchall(cursor):
-    #"Return all rows from a cursor as a dict"
-    desc = cursor.description
-
-    return [
-        dict(zip([col[0] for col in desc], row))
-        for row in cursor.fetchall()
-    ]
 
 
 def register(request):
@@ -44,7 +32,7 @@ def register(request):
 def corp_register(request):
     msg = None
     name = None
-    ward_list = Corporator.objects.all()
+    ward_list = Corporator.objects.all().exclude(ward_no__in=User.objects.all())
     if request.method == 'POST':
         form = CorpRegForm(request.POST)
         if form.is_valid():
@@ -58,9 +46,9 @@ def corp_register(request):
             return redirect('login_view')
         else:
             msg = 'Form is not valid'
-            print(form.errors.as_data())
     else:
         form = SignUpForm()
+    print(ward_list.query)
     return render(request, 'corporator_register.html', {'form': form, 'ward_list': ward_list ,'msg': msg})
 
 
@@ -112,7 +100,7 @@ def insert_pothole(request):
 def assign_pothole(request):
     form = AssignPotholeForm(request.POST or None)
     data = Pothole.objects.filter(ward_no = request.user.ward_no.ward_no)
-    p_list = Pothole.objects.filter(ward_no = request.user.ward_no.ward_no)
+    p_list = Pothole.objects.filter(ward_no = request.user.ward_no.ward_no).exclude(p_id__in=Allotment.objects.all())
     c_list  = Contractor.objects.all()
     if request.method == 'POST':
         if form.is_valid():
@@ -157,22 +145,22 @@ def corp_mark_done(request):
 
 #User page view
 def user(request):
-    r = Pothole.objects.filter(user_id = request.user.id)
-    data = {'data' : r}
-    return render(request, 'user.html', data)
+    data_done = Pothole.objects.filter(user_id = request.user.id, corp_done = True, cont_done = True)
+    data_pending = Pothole.objects.filter(user_id = request.user.id, corp_done = False)
+    return render(request, 'user.html', {'data_pending': data_pending, 'data_done': data_done})
 
 
 #Contractor page view
 def contractor(request):
     #SELECT p.p_id, address, remarks, date, img, user_id, ward_no FROM account_pothole p INNER JOIN account_allotment a ON (p.p_id = a.p_id) WHERE a.c_id = request.user.id
-    r = Pothole.objects.filter(allotment__c_id = request.user.id)
-    data = {'data' : r}
-    return render(request, 'contractor.html', data)
+    data_done = Pothole.objects.filter(allotment__c_id = request.user.id, cont_done = True)
+    data_pending = Pothole.objects.filter(allotment__c_id = request.user.id, cont_done = False)
+    return render(request, 'contractor.html', {'data_done': data_done, 'data_pending': data_pending})
 
 
 #Corporator page view
 def corporator(request):
-    r = Pothole.objects.filter(ward_no = request.user.ward_no)
-    data = {'data' : r}
-    return render(request, 'corporator.html', data)
+    data_done = Pothole.objects.filter(ward_no = request.user.ward_no, cont_done = True)
+    data_pending = Pothole.objects.filter(ward_no = request.user.ward_no, cont_done = False)
+    return render(request, 'corporator.html', {'data_done': data_done, 'data_pending': data_pending})
 
