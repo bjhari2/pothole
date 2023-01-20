@@ -32,7 +32,7 @@ def register(request):
 def corp_register(request):
     msg = None
     name = None
-    ward_list = Corporator.objects.all().exclude(ward_no__in=User.objects.all())
+    ward_list = Corporator.objects.all()
     if request.method == 'POST':
         form = CorpRegForm(request.POST)
         if form.is_valid():

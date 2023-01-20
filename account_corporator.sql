@@ -55,8 +55,8 @@ INSERT INTO `account_corporator` (`ward_no`, `name`) VALUES
 --
 -- Indexes for table `account_corporator`
 --
-ALTER TABLE `account_corporator`
-  ADD PRIMARY KEY (`ward_no`);
+-- ALTER TABLE `account_corporator`
+--   ADD PRIMARY KEY (`ward_no`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
