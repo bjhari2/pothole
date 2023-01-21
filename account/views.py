@@ -108,6 +108,7 @@ def assign_pothole(request):
             return redirect('corporator')
     else:
         form = AssignPotholeForm()
+    print(p_list.query)
     return render(request, 'assign_pothole.html', {'form': form, 'data': data, 'p_list': p_list, 'c_list': c_list})
 
 
@@ -135,8 +136,8 @@ def corp_mark_done(request):
     if request.method == 'POST':
         if form.is_valid():
             update = Pothole.objects.get(p_id=request.POST['p_id'])
-            update.corp_done = True
-            update.save()
+            #update.corp_done = True
+            update.delete()
             return redirect('corporator')
     else:
         form = CorpMarkDoneForm()
