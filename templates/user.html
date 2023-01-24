@@ -48,6 +48,37 @@
     </div>
   </div>
 
+  <div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <div class="form-block text-center" style="padding: 15px; border-radius: 15px;">
+              <form action="{% url 'update_pothole' %}" method="GET">
+                <p class="m-2" style="text-align: center; font-size: larger; color: black;">
+                  Select a
+                  Pothole to edit
+                  details</p>
+                <div class="form-group">
+                  <label for="p_id">Pothole ID :</label>
+                  <select name="p_id" id="p_id">
+                    {% for i in data_pending %}
+                    <option value="{{ i.p_id }}">{{ i.p_id }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-pill text-white btn-primary"
+                  style="border-radius: 30px;">Edit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
   {% block table_pending %}
   {% if data_pending %}
 

@@ -62,6 +62,22 @@ class InsertNewPotholeForm(forms.ModelForm):
         exclude = ['user']
 
 
+class UpdatePotholeForm(forms.ModelForm):
+
+    class Meta:
+        model = Pothole
+        fields = ('p_id', 'address', 'remarks', 'date', 'img', 'ward_no')
+        exclude = ['user']
+    
+    def __init__(self, *args, **kwargs):
+        super(UpdatePotholeForm, self).__init__(*args, **kwargs)
+        self.fields['address'].required = False
+        self.fields['remarks'].required = False
+        self.fields['date'].required = False
+        self.fields['img'].required = False
+        self.fields['ward_no'].required = False
+
+
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(

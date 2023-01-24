@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm, InsertNewPotholeForm, CorpRegForm, AssignPotholeForm, ContMarkDoneForm, CorpMarkDoneForm
+from .forms import SignUpForm, LoginForm, InsertNewPotholeForm, UpdatePotholeForm, CorpRegForm, AssignPotholeForm, ContMarkDoneForm, CorpMarkDoneForm
 from django.contrib.auth import authenticate, login, logout
-from .models import User, Pothole, Corporator, Contractor, Allotment
+from .models import User, Pothole, Corporator, Contractor, Allotment, Done
 # Create your views here.
 
 
@@ -93,7 +93,23 @@ def insert_pothole(request):
             return redirect('user')
     else:
         form = InsertNewPotholeForm()
-    return render(request, 'insert_pothole.html', {'form': form, 'ward_list': ward_list})
+    return render(request, 'ins_updt_pothole.html', {'form': form, 'ward_list': ward_list, 'update': False})
+
+
+#Updating pothole details by user
+def update_pothole(request):
+    data_pending = Pothole.objects.filter(user_id = request.user.id, corp_done = False)
+    edit = Pothole.objects.get(p_id = request.GET['p_id'])
+    form = UpdatePotholeForm(request.POST or None, instance=edit)
+    ward_list = Corporator.objects.values('ward_no')
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('user')
+    else:
+        form = UpdatePotholeForm()
+    print(edit.date)
+    return render(request, 'ins_updt_pothole.html', {'form': form, 'edit':edit, 'data_pending':data_pending, 'ward_list': ward_list, 'update': True})
 
 
 #View to assign pothole to a contractor
@@ -108,7 +124,6 @@ def assign_pothole(request):
             return redirect('corporator')
     else:
         form = AssignPotholeForm()
-    print(p_list.query)
     return render(request, 'assign_pothole.html', {'form': form, 'data': data, 'p_list': p_list, 'c_list': c_list})
 
 
@@ -136,7 +151,16 @@ def corp_mark_done(request):
     if request.method == 'POST':
         if form.is_valid():
             update = Pothole.objects.get(p_id=request.POST['p_id'])
-            #update.corp_done = True
+            update.corp_done = True
+            done = Done.objects.create(p_id=Pothole.objects.get(p_id=request.POST['p_id']).p_id,
+                    address=Pothole.objects.get(p_id=request.POST['p_id']).address,
+                    remarks=Pothole.objects.get(p_id=request.POST['p_id']).remarks,
+                    date=Pothole.objects.get(p_id=request.POST['p_id']).date,
+                    img=Pothole.objects.get(p_id=request.POST['p_id']).img,
+                    user=User.objects.get(pothole__p_id=request.POST['p_id']),
+                    ward_no=Corporator.objects.get(user__ward_no=request.user.ward_no.ward_no)
+            )
+            done.save()
             update.delete()
             return redirect('corporator')
     else:
@@ -146,7 +170,7 @@ def corp_mark_done(request):
 
 #User page view
 def user(request):
-    data_done = Pothole.objects.filter(user_id = request.user.id, corp_done = True, cont_done = True)
+    data_done = Done.objects.filter(user_id = request.user.id)
     data_pending = Pothole.objects.filter(user_id = request.user.id, corp_done = False)
     return render(request, 'user.html', {'data_pending': data_pending, 'data_done': data_done})
 

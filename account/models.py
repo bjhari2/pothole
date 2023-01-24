@@ -37,3 +37,11 @@ class Allotment(models.Model):
     p_id = models.ForeignKey(Pothole, primary_key=True, on_delete=models.CASCADE, db_column='p_id')
     c_id = models.ForeignKey(Contractor, on_delete=models.CASCADE, db_column='c_id')
 
+class Done(models.Model):
+    p_id = models.IntegerField(primary_key=True, db_column='p_id')
+    address = models.CharField(max_length=500)
+    remarks = models.CharField(max_length=500)
+    date = models.DateField(null=True)
+    img = models.ImageField(upload_to='images/', default='pothole.jpg')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column='user_id')
+    ward_no = models.ForeignKey(Corporator, on_delete=models.DO_NOTHING, db_column='ward_no')
