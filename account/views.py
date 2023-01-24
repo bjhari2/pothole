@@ -48,7 +48,6 @@ def corp_register(request):
             msg = 'Form is not valid'
     else:
         form = SignUpForm()
-    print(ward_list.query)
     return render(request, 'corporator_register.html', {'form': form, 'ward_list': ward_list ,'msg': msg})
 
 
@@ -108,7 +107,6 @@ def update_pothole(request):
             return redirect('user')
     else:
         form = UpdatePotholeForm()
-    print(edit.date)
     return render(request, 'ins_updt_pothole.html', {'form': form, 'edit':edit, 'data_pending':data_pending, 'ward_list': ward_list, 'update': True})
 
 
